@@ -13,6 +13,90 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Customer {
+  customer_id String @id @default(uuid())
+  customer_name String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+enum FileDocType {
+  PassportImg
+  AddressProof
+  PaymentSlips
+  InternalDocs
+  Others
+}
+
+model FileDocs {
+  file_id Int @id @default(autoincrement())
+  file_name String
+  file_internal_name String
+  file_location String
+  file_size String
+  file_type FileDocType
+  comments String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model AppServices {
+  services_id Int @default(autoincrement()) @id
+  service_internal_name String
+  service_external_name String?
+  service_note String?
+  service_description String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  OrganizationServices OrganizationServices[]
+}
+
+enum LinkType{
+  NAVMENU
+  SIDEBARMENU
+  DEFAULT
+}
+
+model ServicesNavLink{
+  link_id Int @default(autoincrement()) @id
+  link_name String
+  link_href String
+  link_type LinkType
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model Address {
+  address_id Int @default(autoincrement()) @id
+  address_line_1 String?
+  address_line_2 String?
+  address_line_3 String?
+  address_line_4 String?
+  area String
+  pincode Int
+  state String
+  country String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model ContactInfo{
+  contact_id Int @id @default(autoincrement())
+  contact_number Int
+  contact_code String?
+  country_code String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model EmailInfo{
+  email_id Int @id @default(autoincrement())
+  email String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
 model User {
   user_id String @id @default(uuid())
   email  String @unique
@@ -20,4 +104,24 @@ model User {
   display_picture String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+  Organization Organization[]
+}
+
+model Organization {
+  org_id String @id @default(uuid())
+  org_internal_name String @unique
+  org_external_name String?
+  user_id String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user User @relation(fields: [user_id],references: [user_id])
+}
+
+model OrganizationServices{
+  org_service_id String @id @default(uuid())
+  service_id Int
+  service_name String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  service AppServices @relation(fields: [service_id],references: [services_id])
 }

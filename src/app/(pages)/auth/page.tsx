@@ -13,9 +13,9 @@ export const handleSignOut = () => signOut();
 
 const page = () => {
   const { data: session } = useSession();
-  // if (session) {
-  //   redirect("/app");
-  // }
+  if (session) {
+    redirect("/authenticate");
+  }
 
   return (
     <div className="min-h-[90vh] flex w-3/6 mx-auto text-center flex-col justify-center">

@@ -46,7 +46,7 @@ export const authOptions = {
       // Only generate a custom token if email exists in `token`
       if (token.email) {
         token.customToken = await new jose.SignJWT({
-          id: token.id,
+          user_id: token.id,
           email: token.email,
           name: token.name,
           image: token.image,
