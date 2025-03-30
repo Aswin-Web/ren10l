@@ -56,6 +56,8 @@ enum LinkType{
   NAVMENU
   SIDEBARMENU
   DEFAULT
+  ADMIN
+  USER
 }
 
 model ServicesNavLink{
@@ -63,8 +65,27 @@ model ServicesNavLink{
   link_name String
   link_href String
   link_type LinkType
+  link_icon String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+  NavlinkMasterMapper NavlinkMasterMapper[]
+}
+
+
+model MasterLink {
+  master_link_id Int @id @default(autoincrement())
+  master_internal_name  String
+  master_external_name String
+  NavlinkMasterMapper NavlinkMasterMapper[]
+}
+
+model NavlinkMasterMapper{
+  id Int @id @default(autoincrement())
+  master_link_id Int
+  master_link MasterLink @relation(fields: [master_link_id  ],references: [master_link_id])
+  order_no Int @default(0)
+  link_id Int
+  link ServicesNavLink @relation(fields: [link_id], references: [link_id])
 }
 
 model Address {
@@ -115,13 +136,17 @@ model Organization {
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
   user User @relation(fields: [user_id],references: [user_id])
+
+  OrganizationServices OrganizationServices[]
 }
 
 model OrganizationServices{
   org_service_id String @id @default(uuid())
   service_id Int
   service_name String?
+  org_id String
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
   service AppServices @relation(fields: [service_id],references: [services_id])
+  org Organization @relation(fields: [org_id],references: [org_id])
 }

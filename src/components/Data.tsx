@@ -4,10 +4,10 @@ export const ProductName = () => {
     <>
       <div className="inline">
         <span className="text-logoMain1 text-xl font-medium font-mono tracking-wider">
-          Busins
+          Ren
         </span>
         <span className="text-logoMain2 text-xl font-medium font-mono tracking-wider">
-          360
+          10l
         </span>
       </div>
     </>

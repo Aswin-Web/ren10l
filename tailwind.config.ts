@@ -12,7 +12,13 @@ export default {
         violet:"#654cdc",
         white:"#ffffff",
         black:"#191919",
-        lightColor:"#1a1d1c"
+        lightBgColor:"#f3f3f3",
+        darkbgColor:"#c2c3c3",
+        blackColor:"#464851",
+        greyColor:"#464851",
+        redColor:"#c5605f",
+        blueColor:"#6255ed",
+        lightBlackColor:"#1E201E"
       },
     },
   },

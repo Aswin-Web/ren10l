@@ -4,10 +4,10 @@ import { ProductName } from "@/components/Data";
 
 interface ListItem {
   name: string;
-  logo: React.ReactElement;
+  logo: string;
   link: string;
 }
-const SidebarMenuList = ({ list }: { list: ListItem[] }) => {
+const SidebarMenuList = async ({ list }: { list:ListItem[] }) => {
   return (
     <div>
       {/* brandLogo */}
@@ -15,7 +15,7 @@ const SidebarMenuList = ({ list }: { list: ListItem[] }) => {
         <ProductName />
       </div>
       <></>
-      {list.map((item, ind) => {
+      {(await list).map((item, ind) => {
         return (
           <>
             <SidebarMenu data={item} />

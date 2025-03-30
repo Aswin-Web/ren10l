@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^3.11.0",
     "@emotion/react": "^11.14.0",
     "@prisma/client": "^6.5.0",
+    "axios": "^1.8.4",
     "graphql": "^16.10.0",
     "jose": "^6.0.10",
     "jsonwebtoken": "^9.0.2",
