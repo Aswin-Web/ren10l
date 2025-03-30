@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/Button";
+import { Icons } from "@/components/icons/icon.list";
 import Link from "next/link";
 import React from "react";
 
@@ -16,7 +17,9 @@ const SidebarMenu = ({
       >
         <div className="flex items-center">
           {/* logo */}
-          <div className="w-1/6 flex justify-center">{data.logo}</div>
+          <div className="w-1/6 flex justify-center">
+            {React.createElement(Icons[data.logo],{size:18})}
+          </div>
           {/* text */}
           <div className="text-sm w-5/6 text-left font-medium">{data.name}</div>
         </div>

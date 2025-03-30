@@ -6,13 +6,13 @@ const Button = ({
   className,
 }: {
   children?: React.ReactNode;
-  handleClick: (e: any) => void;
+  handleClick?: (e: any) => void;
   className?: string;
 }) => {
   return (
     <button
       className={
-        "cursor-pointer p-2 border-2 border-subHeadingColor rounded-lg text-textColor" +
+        "cursor-pointer p-2 border-2 border-darkbgColor rounded-lg text-textColor" +
         className
       }
       onClick={(e) => handleClick(e)}

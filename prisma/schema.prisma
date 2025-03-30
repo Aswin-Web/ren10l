@@ -18,6 +18,18 @@ model Customer {
   customer_name String
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+
+  CustomerAddress CustomerAddress[]
+
+  CustomerContactInfo CustomerContactInfo[]
+
+  CustomerEmailInfo CustomerEmailInfo[]
+
+  CustomerFilesInfo CustomerFilesInfo[]
+
+  CustomerGuardian CustomerGuardian[]
 }
 
 enum FileDocType {
@@ -38,6 +50,8 @@ model FileDocs {
   comments String
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  CustomerFilesInfo CustomerFilesInfo[]
 }
 
 model AppServices {
@@ -100,6 +114,12 @@ model Address {
   country String
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  Complexes Complexes[]
+
+  CustomerAddress CustomerAddress[]
+
+  CustomerGuardian CustomerGuardian[]
 }
 
 model ContactInfo{
@@ -109,6 +129,10 @@ model ContactInfo{
   country_code String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  CustomerContactInfo CustomerContactInfo[]
+
+  CustomerGuardian CustomerGuardian[]
 }
 
 model EmailInfo{
@@ -116,6 +140,10 @@ model EmailInfo{
   email String
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  CustomerEmailInfo CustomerEmailInfo[]
+
+  CustomerGuardian CustomerGuardian[]
 }
 
 model User {
@@ -126,6 +154,22 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
   Organization Organization[]
+
+  Complexes Complexes[]
+
+  ComplexFloors ComplexFloors[]
+
+  FloorSpaces FloorSpaces[]
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+
+  CustomerAddress CustomerAddress[]
+
+  CustomerContactInfo CustomerContactInfo[]
+
+  CustomerEmailInfo CustomerEmailInfo[]
+
+  CustomerFilesInfo CustomerFilesInfo[]
 }
 
 model Organization {
@@ -138,6 +182,8 @@ model Organization {
   user User @relation(fields: [user_id],references: [user_id])
 
   OrganizationServices OrganizationServices[]
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
 }
 
 model OrganizationServices{
@@ -149,4 +195,170 @@ model OrganizationServices{
   updated_at DateTime @default(now()) @updatedAt
   service AppServices @relation(fields: [service_id],references: [services_id])
   org Organization @relation(fields: [org_id],references: [org_id])
+
+  Complexes Complexes[]
+
+  ComplexFloors ComplexFloors[]
+
+  FloorSpaces FloorSpaces[]
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+}
+
+
+model Complexes {
+  complex_id Int @id @default(autoincrement())
+  complex_display_name String
+  comples_full_name String?
+  available_floors Int
+  address_id Int?
+  org_service_id String
+  user_id String
+  org_service OrganizationServices @relation(fields: [org_service_id],references: [org_service_id])
+  user User @relation(fields: [user_id],references: [user_id])
+  address Address? @relation(fields: [address_id],references: [address_id])
+  complex_init_status Boolean @default(false)
+created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  ComplexFloors ComplexFloors[]
+
+  FloorSpaces FloorSpaces[]
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+}
+
+model ComplexFloors {
+  floor_id Int @id @default(autoincrement())
+  floor_code String
+  floor_name String
+  floor_order Int
+  available_floor_space Int
+  org_service_id String
+  user_id String
+  complex_id Int
+  complex Complexes @relation(fields: [complex_id],references: [complex_id])
+  org_service OrganizationServices @relation(fields: [org_service_id],references: [org_service_id])
+  user User @relation(fields: [user_id],references: [user_id])
+  floor_init_status Boolean @default(false)
+created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  FloorSpaces FloorSpaces[]
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+}
+
+model FloorSpaces {
+  space_id Int @id @default(autoincrement())
+  space_code String
+  space_name String
+  space_comments String?
+  space_max_customers Int
+  space_filled_customers Int
+  space_balance_customers Int
+  space_rent_per_customer Int
+  org_service_id String
+  floor_id Int 
+  user_id String
+  complex_id Int
+  floor ComplexFloors @relation(fields: [floor_id],references: [floor_id])
+  complex Complexes @relation(fields: [complex_id],references: [complex_id])
+  org_service OrganizationServices @relation(fields: [org_service_id],references: [org_service_id])
+  user User @relation(fields: [user_id],references: [user_id])
+created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  CustomerMappedComplexes CustomerMappedComplexes[]
+}
+
+model CustomerMappedComplexes{
+  id Int @id @default(autoincrement())
+  customer_id String
+  complex_id Int
+  floor_id Int
+  space_id Int
+  org_service_id String
+  user_id String
+  org_id String
+  org Organization @relation(fields: [org_id],references: [org_id]) 
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  complex Complexes @relation(fields: [complex_id],references: [complex_id])
+  floor ComplexFloors @relation(fields: [floor_id],references: [floor_id])
+  space FloorSpaces @relation(fields: [space_id],references: [space_id])
+  org_service OrganizationServices @relation(fields: [org_service_id],references: [org_service_id])
+  user User @relation(fields: [user_id],references: [user_id]) 
+  payment_date String
+  advance_amount Int?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+}
+
+model CustomerAddress{
+  id Int @default(autoincrement()) @id
+  address_id Int
+  address Address @relation(fields: [address_id],references: [address_id])
+  customer_id String
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  is_permanent Boolean @default(false)
+  user_id String
+  user User @relation(fields: [user_id],references: [user_id]) 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+}
+model CustomerContactInfo {
+  id Int @default(autoincrement()) @id
+  customer_id String
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  contact_id Int
+  contact ContactInfo @relation(fields: [contact_id],references: [contact_id])
+  is_permanent Boolean @default(false)
+   user_id String
+  user User @relation(fields: [user_id],references: [user_id]) 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+}
+model CustomerEmailInfo{
+  id Int @default(autoincrement()) @id
+  customer_id String
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  email_id Int
+  email EmailInfo @relation(fields: [email_id],references: [email_id])
+  is_permanent Boolean @default(false)
+  user_id String
+  user User @relation(fields: [user_id],references: [user_id]) 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+}
+model CustomerFilesInfo{
+  id Int @default(autoincrement()) @id
+  customer_id String
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  file_id Int
+  file FileDocs @relation(fields: [file_id],references: [file_id])
+  file_comments String
+  user_id String
+  user User @relation(fields: [user_id],references: [user_id]) 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model CustomerGuardian{
+  id Int @default(autoincrement()) @id
+  customer_id String
+  customer Customer @relation(fields: [customer_id],references: [customer_id])
+  guardian_type String
+  guardian_name String
+  email_id Int
+  email EmailInfo @relation(fields: [email_id],references: [email_id])
+  contact_id Int
+  contact ContactInfo @relation(fields: [contact_id],references: [contact_id])
+  address_id Int
+  address Address @relation(fields: [address_id],references: [address_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }

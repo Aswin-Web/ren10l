@@ -87,3 +87,10 @@ Send Notifications (Email/SMS/WhatsApp)
 
 7️⃣ General Settings
 About (Company Info, Terms, Contact)
+
+ADDING SPACES
+
+1. Adding a mutliple complexes
+2. Specifying Each Complex with floors
+3. Specifying Each Floors with available rooms/houses
+4. Specifying Each rooms/houses with number of people using it(RENT Needed to be updated)
