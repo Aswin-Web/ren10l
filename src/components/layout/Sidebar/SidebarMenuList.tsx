@@ -17,9 +17,9 @@ const SidebarMenuList = async ({ list }: { list:ListItem[] }) => {
       <></>
       {(await list).map((item, ind) => {
         return (
-          <>
+          <div key={ind}>
             <SidebarMenu data={item} />
-          </>
+          </div>
         );
       })}
     </div>
