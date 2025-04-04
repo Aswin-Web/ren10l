@@ -4,5 +4,8 @@ export const axiosRequest = axios.create({
   baseURL: SERVER_URL,
   timeout: 10000,
   //   headers: { "X-Custom-Header": "foobar" },
+  headers: {
+    'Content-Type': 'application/json',
+  },
   withCredentials: true,
 });

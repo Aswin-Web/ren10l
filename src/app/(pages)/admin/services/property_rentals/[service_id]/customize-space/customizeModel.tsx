@@ -19,31 +19,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Toast } from "@/components/ui/toast";
-import AddressForm, {
-  AddressSchema,
-} from "@/components/ReUsableFormComponents/Address";
-const FormSchema = z.object({
-  complex_display_name: z.string().min(2, {
-    message: "Display Name must be at least 2 characters.",
-  }),
-  complex_full_name: z.string().min(2, {
-    message: "Full Name must be at least 2 characters.",
-  }),
-  available_floors: z
-    .number()
-    .gte(1, {
-      message: "floors must be at least 1.",
-    })
-    .lte(1000, {
-      message: "floors must be at less than 1000 characters.",
-    }),
-  address: AddressSchema,
-});
+import AddressForm from "@/components/ReUsableFormComponents/Address";
+import { axiosRequest } from "@/config/axiosRequest";
+import { CustomizeSpaceFormSchema } from "@/lib/schemas/admin/property_rentals/propertyRentals.schema";
+import { useParams } from "next/navigation";
 
 const AddCustomizeSpaceModel = () => {
+  const params = useParams();
+  const service_id = params.service_id;
   // Use State hook
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof CustomizeSpaceFormSchema>>({
+    resolver: zodResolver(CustomizeSpaceFormSchema),
     defaultValues: {
       complex_display_name: "",
       complex_full_name: "",
@@ -60,15 +46,14 @@ const AddCustomizeSpaceModel = () => {
       },
     },
   });
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    Toast({
-      title: "You submitted the following values:",
-      // description: (
-      //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //     <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-      //   </pre>
-      // ),
-    });
+  async function onSubmit(data: z.infer<typeof CustomizeSpaceFormSchema>) {
+    try {
+      console.log("🚀 ~ onSubmit ~ data:", data);
+      let resp = await axiosRequest.post(
+        "/admin/services/property_rentals/customize-space/" + service_id,
+        data
+      );
+    } catch (error) {}
   }
 
   return (
