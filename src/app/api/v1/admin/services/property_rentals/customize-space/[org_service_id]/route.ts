@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/db";
 import { CustomizeSpaceFormSchema } from "@/lib/schemas/admin/property_rentals/propertyRentals.schema";
 import { validatePostRequest } from "@/utils/helper/postRequestSetup.ts/postRequestHelper";
+import { logger } from "@/utils/log/safelog";
 import { authenticateRequest } from "@/utils/middlewarehelpers/helpers/adminCookieCheck";
 import { VerifySchemaValidation } from "@/utils/verifySchemas/verifySchemas";
 import { NextRequest, NextResponse } from "next/server";
+
 
 export async function POST(
   req: NextRequest,
@@ -11,10 +13,6 @@ export async function POST(
 ) {
   try {
     // This function will give you user info,req.body and validation schema errors
-    console.log(
-      "🚀 ~ POST ~ userInfo:",
-      "------------------------------------------"
-    );
 
     const { org_service_id } = await params;
     const { userInfo, reqBody, error } = await validatePostRequest({
@@ -27,7 +25,7 @@ export async function POST(
     console.log("🚀 ~ reqBody:", reqBody);
     console.log("🚀 ~ userInfo:", userInfo);
     // // Prisma invocation
-    console.log("🚀 ~ POST ~ validData:",{
+    console.log("🚀 ~ POST ~ validData:", {
       area: reqBody.address.area,
       country: reqBody.address.country,
       pincode: reqBody.address.pincode,
@@ -36,7 +34,7 @@ export async function POST(
       address_line_2: reqBody.address.address_line_2,
       address_line_3: reqBody.address.address_line_3,
       address_line_4: reqBody.address.address_line_4,
-    },);
+    });
 
     const createCustomizeSpace = await prisma.complexes.create({
       data: {
@@ -75,9 +73,9 @@ export async function POST(
       { data: "Success", sidebarLinks: [] },
       { status: 200 }
     );
-  } catch (error) {
-    console.log("🚀 ~ GET ~ error:", error);
-
+  } catch (e) {
+    logger.error(e,"SSSSSSSSSSSSSSSSSSSSSS");
+    // safeLog("e", e);
     return NextResponse.json({ error: "Server failed" }, { status: 400 });
   }
 }
