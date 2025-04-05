@@ -184,6 +184,8 @@ model Organization {
   OrganizationServices OrganizationServices[]
 
   CustomerMappedComplexes CustomerMappedComplexes[]
+
+  Complexes Complexes[]
 }
 
 model OrganizationServices{
@@ -218,9 +220,10 @@ model Complexes {
   user User @relation(fields: [user_id],references: [user_id])
   address Address? @relation(fields: [address_id],references: [address_id])
   complex_init_status Boolean @default(false)
-created_at DateTime @default(now())
+  org_id String
+  created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
-
+  org Organization @relation(fields: [org_id],references: [org_id])
   ComplexFloors ComplexFloors[]
 
   FloorSpaces FloorSpaces[]

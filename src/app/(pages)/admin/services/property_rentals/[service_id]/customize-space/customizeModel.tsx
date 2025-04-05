@@ -24,7 +24,7 @@ import { axiosRequest } from "@/config/axiosRequest";
 import { CustomizeSpaceFormSchema } from "@/lib/schemas/admin/property_rentals/propertyRentals.schema";
 import { useParams } from "next/navigation";
 
-const AddCustomizeSpaceModel = () => {
+const AddCustomizeSpaceModel = ({ handleCloseModel }) => {
   const params = useParams();
   const service_id = params.service_id;
   // Use State hook
@@ -62,7 +62,7 @@ const AddCustomizeSpaceModel = () => {
         <div className="w-[80vw] h-[80vh] overflow-y-scroll bg-lightBgColor p-4">
           <div className="text-right">
             {/* Close Button */}
-            <button>
+            <button onClick={handleCloseModel}>
               {React.createElement(Icons.FaWindowClose, { size: 20 })}
             </button>{" "}
           </div>

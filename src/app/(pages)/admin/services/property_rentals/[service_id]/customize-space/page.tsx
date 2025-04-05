@@ -1,24 +1,13 @@
 import React from "react";
-import MainHeading from "@/components/text/MainHeading";
-import { Icons } from "../../../../../../../components/icons/icon.list";
-import AddCustomizeSpaceModel from "./customizeModel";
+import CustomizeSpacePage from "./CustomizeSpacePage";
+import { getCreatedSpaces } from "@/actions/admin/services/property_rentals/propertyRental.action";
 
-const page = () => {
+const page = async () => {
+  const complexes = await getCreatedSpaces();
+  console.log("🚀 ~ page ~ complexes:", complexes);
   return (
     <div>
-      {/* Main Heading */}
-      <div className="text-center">
-        <MainHeading>Customize Your Space</MainHeading>
-      </div>
-      {/* Add Space Button */}
-      <div className=" mx-4 w-full flex justify-end gap-1 items-center px-4 ">
-        <button className="px-2 py-1 bg-lightBgColor rounded-md text-sm font-semibold  flex justify-end gap-1 items-center border-2 border-blackColor ">
-          {React.createElement(Icons.IoMdAddCircle, { size: 20 })}
-          Space
-        </button>
-      </div>
-      {/* Add Customize Model */}
-      <AddCustomizeSpaceModel />
+      <CustomizeSpacePage complexesList = {complexes} />
     </div>
   );
 };
