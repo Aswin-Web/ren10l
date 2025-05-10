@@ -207,6 +207,66 @@ model OrganizationServices{
   CustomerMappedComplexes CustomerMappedComplexes[]
 }
 
+model MetafilesInfo {
+  meta_file_id Int @default(autoincrement()) @id
+  external_name String
+  description String
+  comments String
+  file_path String
+  file_type String
+}
+
+model AnchorLinks {
+  link_id Int @default(autoincrement()) @id()
+  external_name String
+  description String
+  href_link String
+  comments String
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+}
+
+
+model Projects {
+  project_id String @default(uuid()) @id
+   project_name String
+description String
+objectives String
+stakeholders String
+start_date DateTime
+end_date DateTime
+status  ProjectStatus
+}
+
+model ProjectDocunments{
+
+}
+
+model ProjectFeatures{
+
+}
+
+model ProjectUsers {
+
+}
+
+model TicketInfo{
+
+}
+
+model TicketLogs{
+
+}
+
+
+
+
+
 
 model Complexes {
   complex_id Int @id @default(autoincrement())
@@ -244,7 +304,7 @@ model ComplexFloors {
   org_service OrganizationServices @relation(fields: [org_service_id],references: [org_service_id])
   user User @relation(fields: [user_id],references: [user_id])
   floor_init_status Boolean @default(false)
-created_at DateTime @default(now())
+  created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
   FloorSpaces FloorSpaces[]

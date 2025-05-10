@@ -16,7 +16,7 @@ const page = async () => {
           <MainHeading>My Services</MainHeading>
         </div>
         {/* List of services */}
-        <div className="flex mt-4">
+        <div className="flex mt-4 gap-4">
           {data.map((elem, ind) => {
             return (
               <div

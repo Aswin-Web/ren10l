@@ -51,9 +51,6 @@ export async function POST(
         },
       },
     });
-    console.log("🚀 ~ createCustomizeSpace:", createCustomizeSpace);
-    // console.log("🚀 ~ createCustomizeSpace:", createCustomizeSpace)
-
     return NextResponse.json(
       { data: "Success", sidebarLinks: [] },
       { status: 200 }

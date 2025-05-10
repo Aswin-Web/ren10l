@@ -1,14 +1,19 @@
 "use client";
 import { GenerateDate } from "@/utils/date/date.utils";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const ComplexInfoCards = ({ complexList }) => {
   const [complex, setComplex] = useState(complexList || []);
+  const router = useRouter();
+
   useEffect(() => {
     setComplex(complexList);
   }, [complexList]);
 
-  console.log("🚀 ~ ComplexInfoCards ~ complex:", complex);
+  const handleNavigateEditConfig = (complex_id) => {
+    router.push("customize-space/edit-config/" + complex_id);
+  };
   return (
     <div>
       {/* List of Complexes */}
@@ -53,17 +58,24 @@ const ComplexInfoCards = ({ complexList }) => {
                 {/* Button */}
                 <div className="flex justify-center my-2 text-xs">
                   <div>
-                    <button className="border-2 border-blackColor p-1 rounded mx-1 ">
+                    <button
+                      className="border-2 border-blackColor p-1 rounded mx-1 "
+                      onClick={() => handleNavigateEditConfig(item.complex_id)}
+                    >
                       Edit Config
                     </button>
                   </div>
 
                   <div>
-                    <button className="border-2 border-blackColor p-1 rounded mx-1">Dashboard</button>
+                    <button className="border-2 border-blackColor p-1 rounded mx-1">
+                      Dashboard
+                    </button>
                   </div>
 
                   <div>
-                    <button className="border-2 border-blackColor p-1 rounded mx-1">Availability</button>
+                    <button className="border-2 border-blackColor p-1 rounded mx-1">
+                      Availability
+                    </button>
                   </div>
                 </div>
               </div>
