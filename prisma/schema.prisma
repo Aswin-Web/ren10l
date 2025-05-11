@@ -170,6 +170,8 @@ model User {
   CustomerEmailInfo CustomerEmailInfo[]
 
   CustomerFilesInfo CustomerFilesInfo[]
+
+  organizationUser OrganizationUser[]
 }
 
 model Organization {
@@ -186,7 +188,46 @@ model Organization {
   CustomerMappedComplexes CustomerMappedComplexes[]
 
   Complexes Complexes[]
+
+  organizationUser OrganizationUser[]
+
+  TicketInfo TicketInfo[]
 }
+
+model OrganizationUser{
+  org_user_id Int @id
+  user_id String
+  org_id String
+  user User @relation(fields: [user_id],references: [user_id])
+  org Organization @relation(fields: [org_id],references: [org_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  Projects Projects[]
+
+  ProjectDocunments ProjectDocunments[]
+
+  ProjectFeatures ProjectFeatures[]
+
+  ProjectSubFeatures ProjectSubFeatures[]
+
+  ProjectFeatureDocunments ProjectFeatureDocunments[]
+
+  ProjectSubFeatureDocunments ProjectSubFeatureDocunments[]
+
+  ProjectLinks ProjectLinks[]
+
+  ProjectFeatureLinks ProjectFeatureLinks[]
+
+  ProjecSubFeatureLinks ProjecSubFeatureLinks[]
+
+  ProjectUsers ProjectUsers[]
+
+  ProjectTeam ProjectTeam[]
+
+  ProjectTeamMember ProjectTeamMember[]
+}
+
 
 model OrganizationServices{
   org_service_id String @id @default(uuid())
@@ -214,6 +255,12 @@ model MetafilesInfo {
   comments String
   file_path String
   file_type String
+
+  ProjectDocunments ProjectDocunments[]
+
+  ProjectFeatureDocunments ProjectFeatureDocunments[]
+
+  ProjectSubFeatureDocunments ProjectSubFeatureDocunments[]
 }
 
 model AnchorLinks {
@@ -233,35 +280,207 @@ enum ProjectStatus {
 
 
 model Projects {
-  project_id String @default(uuid()) @id
-   project_name String
-description String
-objectives String
-stakeholders String
-start_date DateTime
-end_date DateTime
-status  ProjectStatus
+project_id String @default(uuid()) @id
+project_name String
+description String?
+objectives String?
+stakeholders String?
+start_date DateTime?
+end_date DateTime?
+status  ProjectStatus @default(PLANNED)
+org_user_id Int 
+org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+created_at DateTime @default(now())
+updated_at DateTime @default(now()) @updatedAt
+ProjectDocunments ProjectDocunments[]
+
+ProjectFeatureDocunments ProjectFeatureDocunments[]
+
+ProjectSubFeatureDocunments ProjectSubFeatureDocunments[]
+
+ProjectLinks ProjectLinks[]
+
+ProjectFeatureLinks ProjectFeatureLinks[]
+
+ProjecSubFeatureLinks ProjecSubFeatureLinks[]
+
+ProjectUsers ProjectUsers[]
+}
+
+model ProjectLinks {
+  project_link_id Int @id @default(autoincrement())
+  project_id String
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user_id Int 
+org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+created_at DateTime @default(now())
+updated_at DateTime @default(now()) @updatedAt
 }
 
 model ProjectDocunments{
-
+  project_document_id Int @id
+  meta_file_id Int
+  project_id String
+  meta_file MetafilesInfo @relation(fields: [meta_file_id],references: [meta_file_id])
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }
 
 model ProjectFeatures{
+  feature_id Int @id
+  feature_name String
+  feature_description String
+  feature_usecase String
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  ProjectSubFeatures ProjectSubFeatures[]
 
+  ProjectFeatureDocunments ProjectFeatureDocunments[]
+
+  ProjectFeatureLinks ProjectFeatureLinks[]
+}
+
+model ProjectFeatureLinks {
+  project_link_id Int @id @default(autoincrement())
+  project_id String
+  project Projects @relation(fields: [project_id],references: [project_id])
+  feature_id Int
+  feature ProjectFeatures @relation(fields: [feature_id],references: [feature_id])
+  org_user_id Int 
+org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+created_at DateTime @default(now())
+updated_at DateTime @default(now()) @updatedAt
+}
+
+
+model ProjectFeatureDocunments{
+  project_document_id Int @id
+  meta_file_id Int
+  project_id String
+  feature_id Int
+  feature ProjectFeatures @relation(fields: [feature_id],references: [feature_id])
+  meta_file MetafilesInfo @relation(fields: [meta_file_id],references: [meta_file_id])
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+
+
+model ProjectSubFeatures{
+  sub_feature_id Int @id
+  sub_feature_name String
+  sub_feature_description String
+  sub_feature_user_story String
+  sub_feature_usecase String
+  feature_id Int @unique
+  feature ProjectFeatures @relation(fields: [feature_id],references: [feature_id])
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  ProjectSubFeatureDocunments ProjectSubFeatureDocunments[]
+
+  ProjecSubFeatureLinks ProjecSubFeatureLinks[]
+
+}
+
+model ProjecSubFeatureLinks {
+  project_link_id Int @id @default(autoincrement())
+  project_id String
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user_id Int 
+  sub_feature_id Int
+  sub_feature ProjectSubFeatures @relation(fields: [sub_feature_id],references: [sub_feature_id])
+org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+created_at DateTime @default(now())
+updated_at DateTime @default(now()) @updatedAt
+}
+
+model ProjectSubFeatureDocunments{
+  project_document_id Int @id
+  meta_file_id Int
+  project_id String
+  sub_feature_id Int
+  sub_feature ProjectSubFeatures @relation(fields: [sub_feature_id],references: [feature_id])
+  meta_file MetafilesInfo @relation(fields: [meta_file_id],references: [meta_file_id])
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }
 
 model ProjectUsers {
+  project_user_id Int @id @default(autoincrement())
+  org_user_id Int 
+  project_id String 
+  project Projects @relation(fields: [project_id],references: [project_id])
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt  
+}
 
+model ProjectTeam {
+  team_id Int @id @default(autoincrement())
+  team_name String
+  team_descp String
+  team_order Int
+  project_id String 
+  org_user_id Int 
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  ProjectTeamMember ProjectTeamMember[]
+}
+
+enum ProjectTeamMemberRole{
+  Master
+  Slave
+}
+
+model ProjectTeamMember{
+  member_id Int @id @default(autoincrement())
+  team_id Int
+  team ProjectTeam @relation(fields: [team_id],references: [team_id])
+  org_user_id Int
+  org_user OrganizationUser @relation(fields: [org_user_id],references: [org_user_id])
+  member_role ProjectTeamMemberRole @default(Master)
+  is_active Boolean 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+enum TicketStatus {
+  NOTSTARTED
+  STARTED
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
 }
 
 model TicketInfo{
-
+  ticket_id Int @id @default(autoincrement())
+  ticket_subject String
+  ticket_descp String
+  ticket_status TicketStatus
+  org_id String
+  org Organization @relation(fields: [org_id],references: [org_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }
 
-model TicketLogs{
+// model TicketLogs{
 
-}
+// }
 
 
 
